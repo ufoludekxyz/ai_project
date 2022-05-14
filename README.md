@@ -10,6 +10,6 @@
 
 `source venv/bin/activate`
 
-`pip install pandas`
+`pip install -r requirements.txt`
 
 Enjoy.

@@ -1,32 +1,35 @@
-import pandas as pd
+import numpy as np
+from csv import reader
+from tabulate import tabulate
 
-# Names for header
-par_names = ['Temperature of patient',
-             'Occurrence of nausea',
-             'Lumbar pain',
-             'Urine pushing',
-             'Micturition pains',
-             'Burning of urethra, itch, swelling of urethra outlet',
-             'decision: Inflammation of urinary bladder',
-             'decision: Nephritis of renal pelvis origin'
-             ]
+# Import function
+def dataImport(name):
+    with open(name, 'r', encoding='utf-16') as file:
+        return [line for line in reader(file, delimiter='\t')]
 
+# Normalization function
+def normalizeMinMax(table):
+    for row in range(0, len(table)):
+        min_val, max_val = min(table[row]), max(table[row])
+        table[row] = [(1 - 0) * (col - min_val) / (max_val - min_val) for col in table[row]]
+    return table
 
-# Reading file with data (setting tab as values separator, encoding to utf-16 and float separator to comma)
-data_list = pd.read_csv('./diagnosis.data', sep='\t', encoding='utf-16', header=None, thousands=',', names=par_names)
+# Import data.tsv to dataList
+dataList = dataImport('data.tsv')
 
-# Converting yes to 1 and no to 0
-data_list = data_list.replace({'no': 0, 'yes': 1})
+# Create numpy array from dataList
+dataList = np.array(dataList)
 
-# Converting string to float
-data_list['Temperature of patient'] = data_list['Temperature of patient'].astype(float)
+# Replace yes with 1
+dataList = np.where(dataList == 'yes', 1, dataList)
 
-# Min-max normalization function definition
-def min_max_norm(column):
-    return (column - column.min()) / (column.max() - column.min())
+# Replace no with 0
+dataList = np.where(dataList == 'no', 0, dataList)
 
-# Copy of initial DataFrame
-norm_data = data_list.copy()
+# Convert array of strings to array of floats
+dataList = dataList.astype(float)
 
-print(data_list.dtypes)
-print(data_list)
+# Data normalization
+normData = normalizeMinMax(dataList.T).T
+
+print(tabulate(normData))

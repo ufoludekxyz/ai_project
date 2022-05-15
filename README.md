@@ -5,13 +5,19 @@
 #### How to try it?
 
 ```bash
-`git clone`
+git clone
+```
 
-`python -m venv venv`
+```bash
+python -m venv venv
+```
 
-`source venv/bin/activate`
+```bash
+source venv/bin/activate
+```
 
-`pip install -r requirements.txt`
+```bash
+pip install -r requirements.txt
 ```
 
 Enjoy.

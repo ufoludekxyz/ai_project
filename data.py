@@ -32,4 +32,10 @@ dataList = dataList.astype(float)
 # Data normalization
 normData = normalizeMinMax(dataList.T).T
 
-print(tabulate(normData))
+# Splittint data into 2 groups, inputData (first 6 columns) and outputdata (last 2 columns)
+inputData, outputData = normData[:,:6], normData[:,6:]
+
+# Combining inputData and outputData in a single tuple
+finalData = [(inputData[i], outputData[i]) for i in range(0, len(outputData))]
+
+print(tabulate(finalData))

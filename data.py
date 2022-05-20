@@ -39,5 +39,6 @@ def loadData():
 
     # Combining inputData and outputData in a single tuple
     trainData = [(np.array(trainIn[i], ndmin=2).T, np.array(trainOut[i], ndmin=2).T) for i in range(0, len(trainOut))]
+    testData = [(np.array(testIn[i], ndmin=2).T, np.array(testOut[i], ndmin=2).T) for i in range(0, len(testOut))]
 
     return (trainData, testData)

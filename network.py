@@ -77,9 +77,10 @@ class Network(object):
         return (nabla_b, nabla_w)
 
     def evaluate(self, test_data):
-        test_results = [(np.argmax(self.feedforward(x)), y)
+        test_results = [(self.feedforward(x), y)
                         for (x, y) in test_data]
-        return sum(int(x == y) for (x, y) in test_results)
+        #return sum(int(x == y) for (x, y) in test_results)
+        return sum(int((x[0] == y[0]) and (x[1] == y[1])) for (x, y) in test_results)
 
     def cost_derivative(self, output_activations, y):
         return (output_activations-y)

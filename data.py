@@ -17,7 +17,7 @@ def normalizeMinMax(table):
 # Data loader function
 def loadData():
     # Import acute.tsv to dataFile
-    dataFile = dataImport('acute.tsv')
+    dataFile = dataImport('acute2.tsv')
 
     # Create numpy array from dataList
     dataFile = np.array(dataFile)
@@ -39,6 +39,6 @@ def loadData():
 
     # Combining inputData and outputData in a single tuple
     trainData = [(np.array(trainIn[i], ndmin=2).T, np.array(trainOut[i], ndmin=2).T) for i in range(0, len(trainOut))]
-    testData = [(np.array(testIn[i], ndmin=2).T, np.array(testOut[i], ndmin=2).T) for i in range(0, len(testOut))]
+    testData = [(np.array(testIn[i], ndmin=2).T,float(testOut[i])) for i in range(0, len(testOut))]
 
     return (trainData, testData)

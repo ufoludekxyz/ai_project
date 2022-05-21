@@ -7,5 +7,5 @@ trainData, testData = data.loadData()
 net = network.Network([6, 1, 2])
 
 # (training_data, epochs, batch_size, eta, test_data)
-#net.SGD(trainData, 2000, 10, 0.9, test_data=None)
-net.SGD(trainData, 10000, 10, 3, test_data=testData)
+#net.SGD(trainData, 100, 10, 0.9, test_data=None)
+net.SGD(trainData, 10000, 10, 0.1, test_data=testData)

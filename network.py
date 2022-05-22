@@ -2,7 +2,6 @@ import random
 import time
 import numpy as np
 
-
 class Network(object):
 
     def __init__(self, sizes):
@@ -50,8 +49,8 @@ class Network(object):
                 self.update_mini_batch(mini_batch, eta)
             time2 = time.time()
             if test_data:
-                print("Epoch {0}: {1} / {2}, took {3:.2f} seconds".format(
-                    j, self.evaluate(test_data), n_test, time2-time1))
+                print("Epoch {0}: {1} / {2} - {3:.0f}%, took {4:.2f} seconds".format(
+                    j, self.evaluate(test_data), n_test, ((self.evaluate(test_data)/n_test)*100), time2-time1))
             else:
                 print("Epoch {0} complete in {1:.2f} seconds".format(j, time2-time1))
 
@@ -111,10 +110,12 @@ class Network(object):
         network outputs the correct result. Note that the neural
         network's output is assumed to be the index of whichever
         neuron in the final layer has the highest activation."""
-        test_results = [(np.argmax(self.feedforward(x)), y)
+        test_results = [(self.feedforward(x), y)
                         for (x, y) in test_data]
-        #print(test_results)
-        return sum(int(x == y) for (x, y) in test_results)
+                        # spychology, 
+        return sum(int((y[0] == 0 and x[0] <= 0.3) or (y[0] == 1 and x[0] >= 0.7) and 
+                       (y[1] == 0 and x[1] <= 0.3) or (y[1] == 1 and x[1] >= 0.7)) 
+                   for (x, y) in test_results)
 
     def cost_derivative(self, output_activations, y):
         """Return the vector of partial derivatives \partial C_x /

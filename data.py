@@ -1,6 +1,6 @@
-import numpy as np
+from sklearn.model_selection import train_test_split
 from csv import reader
-from tabulate import tabulate
+import numpy as np
 
 # Import function
 def dataImport(name):
@@ -29,9 +29,7 @@ def loadData():
     dataFile = normalizeMinMax(dataFile.T).T
 
     # Data splitting into training and test data
-    mask = np.random.rand(len(dataFile)) <= 0.8
-    trainData = dataFile[mask]
-    testData = dataFile[~mask]
+    trainData, testData = train_test_split(dataFile, test_size=0.2, random_state=25)
 
     # Splitting data into 2 groups, inputData (first 6 columns) and outputdata (last 2 columns)
     testIn, testOut = testData[:,:6], testData[:,6:]

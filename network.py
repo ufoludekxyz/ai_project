@@ -29,6 +29,10 @@ class Network(object):
 
     def SGD(self, training_data, epochs, mini_batch_size, eta,
             test_data=None):
+
+        #Opening file for output
+        file = open('experiments_%s.tsv'%epochs, 'a', encoding='utf-8') 
+
         """Train the neural network using mini-batch stochastic
         gradient descent.  The ``training_data`` is a list of tuples
         ``(x, y)`` representing the training inputs and the desired
@@ -48,9 +52,17 @@ class Network(object):
             for mini_batch in mini_batches:
                 self.update_mini_batch(mini_batch, eta)
             time2 = time.time()
+            evalVal = self.evaluate(test_data)
+            evalAcc = (evalVal/n_test*100)
             if test_data:
                 print("Epoch {0}: {1} / {2} - {3:.0f}%, {4:.2f}s".format(
-                    j, self.evaluate(test_data), n_test, ((self.evaluate(test_data)/n_test)*100), time2-time1))
+                    j, evalVal, n_test, evalAcc, time2-time1))
+                #print("{0}, {3:.0f}".format(
+                #    j, self.evaluate(test_data), n_test, ((self.evaluate(test_data)/n_test)*100), time2-time1))
+
+                #Formatting output
+                file.write('%s\t%s\t%s\t%s\n'%(epochs, mini_batch_size, eta, evalAcc))
+
             else:
                 print("Epoch {0} complete in {1:.2f} seconds".format(j, time2-time1))
 

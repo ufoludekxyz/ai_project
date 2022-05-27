@@ -11,7 +11,7 @@ trainData, testData = data.loadData()
 # (training_data, epochs, batch_size, eta, test_data)
 #net.SGD(trainData, 100, 10, 0.9, test_data=None)
 
-for i in np.arange(10, len(trainData), 10):
-    for j in np.arange(0.01, 15, 0.01):
-        net = network.Network([6, 2])
-        net.SGD(trainData, 200, i, j, test_data=testData)
+for i in np.arange(1, 20, 1):
+    for j in np.arange(1, 20, 1):
+        net = network.Network([6, i, j, 2])
+        net.SGD(trainData, 1000, 10, 0.9, test_data=testData)

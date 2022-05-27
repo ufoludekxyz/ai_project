@@ -31,7 +31,7 @@ class Network(object):
             test_data=None):
 
         #Opening file for output
-        file = open('experiments_%s.tsv'%epochs, 'a', encoding='utf-8') 
+        file = open('experiments/experiments_%s.tsv'%epochs, 'a', encoding='utf-8') 
 
         """Train the neural network using mini-batch stochastic
         gradient descent.  The ``training_data`` is a list of tuples
@@ -61,7 +61,11 @@ class Network(object):
                 #    j, self.evaluate(test_data), n_test, ((self.evaluate(test_data)/n_test)*100), time2-time1))
 
                 #Formatting output
-                file.write('%s\t%s\t%s\t%s\n'%(epochs, mini_batch_size, eta, evalAcc))
+                #file.write('%s\t%s\t%s\t%s\n'%(epochs, mini_batch_size, eta, evalAcc))
+
+                S1 = self.sizes[1]
+                S2 = self.sizes[2]
+                file.write('%s\t%s\t%s\n'%(S1, S2, evalAcc))
 
             else:
                 print("Epoch {0} complete in {1:.2f} seconds".format(j, time2-time1))

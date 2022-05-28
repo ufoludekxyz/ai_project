@@ -6,6 +6,9 @@ class Network(object):
 
     def __init__(self, sizes):
 
+        #Applying Seed
+        np.random.seed(7)
+
         self.num_layers = len(sizes)
         self.sizes = sizes
         self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
@@ -41,8 +44,8 @@ class Network(object):
             evalAcc = (evalVal/n_test*100)
             if cur_err < error_target or j == epochs-1:
                 if test_data:
-                    print("Epoch {0}: {1} / {2} - {3:.0f}%".format(
-                        j, evalVal, n_test, evalAcc))
+                    print("{0}, {1}, {2}, {3:.2f}, {4:.0f}".format(
+                        j, cur_err, evalAcc))
                     #print("Epoch {0}: {1} / {2} - {3:.0f}%".format(
                     #    j, evalVal, n_test, evalAcc '''time2-time1'''))
                 else:
@@ -96,9 +99,9 @@ class Network(object):
         test_results = [(self.feedforward(x), y)
                         for (x, y) in test_data]
 
-                        # spychology, 
-        return sum(int((y[0] == 0 and x[0] <= 0.3) or (y[0] == 1 and x[0] >= 0.7) and 
-                       (y[1] == 0 and x[1] <= 0.3) or (y[1] == 1 and x[1] >= 0.7)) 
+                        # spychology 
+        return sum(int((y[0] == 0 and x[0] <= 0.4) or (y[0] == 1 and x[0] >= 0.6) and 
+                       (y[1] == 0 and x[1] <= 0.4) or (y[1] == 1 and x[1] >= 0.6)) 
                    for (x, y) in test_results)
 
     def cost_derivative(self, output_activations, y):

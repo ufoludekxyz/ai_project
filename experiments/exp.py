@@ -5,21 +5,19 @@ from mpl_toolkits.mplot3d import Axes3D
 
 mpl.use('Qt5Agg')
 
-filter_fun = lambda x: x['Acc'] == 100
+dt = pd.read_csv('epoch_S1_target_acc.csv', names=['epo','s1','tar','acc'])
 
-dt = pd.read_csv('S1_S2_acc.tsv', sep='\t', names=['S1','S2','Acc'])[filter_fun]
+#gd = dt.groupby(['S1', 'S2'])['Acc'].count()
 
-gd = dt.groupby(['S1', 'S2'])['Acc'].count()
+print(dt)
 
-print(gd)
+dt[['s1', 'epo']].plot(grid=True)
 
-#gd.plot(grid=True)
+plt.title('Relation between number of neurons and classification efficiency')
+plt.ylabel('Amount of epochs needed for correct classification')
+plt.xlabel('Amount of S1 neurons')
+plt.xticks(range(1,20))
+plt.yticks(range(0,135,10))
+plt.savefig('S1_acc.png', dpi=500)
 
-#plt.title('Relation between number of neurons and classification accuracy')
-#plt.xlabel('Numbers of S1 and S2 neurons')
-#plt.ylabel('Amount of 100% classifications')
-#plt.xticks(range(1,20))
-#plt.yticks(range(900,1000,5))
-#plt.savefig('Test.png', dpi=500)
-
-#plt.show()
+plt.show()

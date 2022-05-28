@@ -15,10 +15,10 @@ trainData, testData = data.loadData()
 
 results = []
 
-for i in np.arange(1, 21, 1):
-    for j in np.arange(1, 21, 1):
+for i in np.arange(2, 21, 1):
+    for j in np.arange(2, 21, 1):
         net = network.Network([6, i, j, 2])
-        results.append(net.SGD(trainData, 2000, 10, 0.9, error_target=0.07, test_data=testData))
+        results.append(net.SGD(trainData, 500, 10, 0.9, error_target=0.07, test_data=testData))
 
 results = pd.DataFrame(results)
-results.to_csv('experiments/results1.csv', index=None, header=None)
+results.to_csv('../results1.csv', index=None, header=None)

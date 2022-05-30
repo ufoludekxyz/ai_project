@@ -120,8 +120,8 @@ class Network(object):
                         for (x, y) in test_data]
 
                         # Approximation
-        return sum(int((y[0] == 0 and x[0] <= 0.4) or (y[0] == 1 and x[0] >= 0.6) and 
-                       (y[1] == 0 and x[1] <= 0.4) or (y[1] == 1 and x[1] >= 0.6)) 
+        return sum(int((y[0] == 0 and x[0] < 0.5) or (y[0] == 1 and x[0] > 0.5) and 
+                       (y[1] == 0 and x[1] < 0.5) or (y[1] == 1 and x[1] > 0.5)) 
                    for (x, y) in test_results)
 
     def cost_derivative(self, output_activations, y):

@@ -26,7 +26,7 @@ class Network(object):
             a = sigmoid(np.dot(w, a)+b)
         return a
 
-        # Mean Square Errro
+        # Mean Square Error
     def mse(self,_test_data):
         error=[pow(np.linalg.norm(self.feedforward(x)-y),2) for (x,y) in _test_data]
         return 1/len(_test_data)*sum(error)
@@ -50,13 +50,17 @@ class Network(object):
             evalAcc = (evalVal/n_test*100)
             if cur_err < error_target or j == epochs-1:
                 if test_data:
-                    print("{0}, {1}, {2}, {3:.2f}, {4:.0f}".format(
-                        j, cur_err, evalAcc))
+                    #print("{0}, {2:.2f}, {3:.0f}%".format(
+                    #    j, cur_err, evalAcc))
                     #print("Epoch {0}: {1} / {2} - {3:.0f}%".format(
                     #    j, evalVal, n_test, evalAcc '''time2-time1'''))
+                    pass
                 else:
                     print("Epoch {0} complete in {1:.2f} seconds".format(j, time2-time1))
                 break
+
+            print("{0}, {1:.6f}, {2:.0f}%".format(j, cur_err, evalAcc))
+            
 
     def update_mini_batch(self, mini_batch, eta):
 

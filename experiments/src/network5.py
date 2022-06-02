@@ -48,10 +48,12 @@ class Network(object):
             time2 = time.time()
             evalVal = self.evaluate(test_data)
             evalAcc = (evalVal/n_test*100)
+            S1 = self.sizes[1]
+            S2 = self.sizes[2]
             if cur_err < error_target or j == epochs-1:
                 if test_data:
-                    print("{0}, {1:.3f}, {2:.3f}, {3:.0f}%".format(j, eta, cur_err, evalAcc))
-                    return(j, eta, cur_err, evalAcc)
+                    print("{0}, {1}, {2}, {3:.2f}, {4:.0f}%".format(j, S1, S2, cur_err, evalAcc))
+                    return(j, S1, S2, cur_err, evalAcc)
                     pass
                 else:
                     print("Epoch {0} complete in {1:.2f} seconds".format(j, time2-time1))

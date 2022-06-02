@@ -1,5 +1,5 @@
 import data
-import network2 as network
+import network5 as network
 
 import numpy as np
 import pandas as pd
@@ -8,16 +8,17 @@ import pandas as pd
 trainData, testData = data.loadData()
 
 # [input vector size, S1 neurons, S2 neurons, output]
-net = network.Network([6,2])
+#net = network.Network([6,2])
 
 # (training_data, epochs, batch_size, eta, target, test_data)
 #net.SGD(trainData, 100, 10, 0.9, test_data=None)
 #net.SGD(trainData, 100000, 1, 0.1, error_target=0.179,test_data=testData)
 results = []
 
-for i in np.linspace(0.001, 0.5, num=500):
-    net = network.Network([6, 2])
-    results.append(net.SGD(trainData, 10000, 1, 0.01, error_target=i, test_data=testData))
+for i in range(2, 21, 1):
+    for j in range(2, 21, 1):
+        net = network.Network([6, i, j, 2])
+        results.append(net.SGD(trainData, 10000, 1, 0.1, error_target=0.18, test_data=testData))
 
 results = pd.DataFrame(results)
-results.to_csv('../epo_err_acc.csv', index=None, header=None)
+results.to_csv('../epo_S1_S2_err_acc.csv', index=None, header=None)

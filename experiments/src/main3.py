@@ -15,7 +15,7 @@ trainData, testData = data.loadData()
 #net.SGD(trainData, 100000, 1, 0.1, error_target=0.179,test_data=testData)
 results = []
 
-for i in np.arange(0.0001, 0.9, 0.0001):
+for i in np.arange(0.001, 0.1, 0.001):
     net = network.Network([6, 2])
     results.append(net.SGD(trainData, 10000, 1, i, error_target=0.18, test_data=testData))
 

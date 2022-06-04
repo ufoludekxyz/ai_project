@@ -15,9 +15,9 @@ trainData, testData = data.loadData()
 #net.SGD(trainData, 100000, 1, 0.1, error_target=0.179,test_data=testData)
 results = []
 
-for i in range(2, 21, 1):
-    net = network.Network([6, 1, i, 2])
-    results.append(net.SGD(trainData, 10000, 1, 0.1, error_target=0.18, test_data=testData))
+for i in np.arange(0.001, 0.1, 0.001):
+    net = network.Network([6, 20, 20, 2])
+    results.append(net.SGD(trainData, 10000, 1, i, error_target=0.18, test_data=testData))
 
 results = pd.DataFrame(results)
-results.to_csv('../epo_S1=1_S2_err_acc.csv', index=None, header=None)
+results.to_csv('../epo_S1=20_S2=20_eta_err_acc.csv', index=None, header=None)

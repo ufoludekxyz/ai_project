@@ -185,41 +185,15 @@ W przypadku sieci jednokierunkowej dane mogą przepływać tylko w jednym kierun
 
 Każda pojedyncza warstwa neuronów posiada:
 \begin{itemize}
-	\item macierz wag \textbf{w}:
+	\item macierz wag \textbf{w}
 \end{itemize}
-\begin{equation*}
-	w =
-	\begin{bmatrix}
-		w_{11} & w_{12} & \dots & w_{1L}\\
-		w_{21} & w_{22} & \dots & w_{2L}\\
-		\vdots & \vdots &  & \vdots\\
-		w_{K1} & w_{K2} & \dots & w_{KL}
-	\end{bmatrix}
-\end{equation*}
-gdzie:
 \begin{itemize}[resume]
-	\begin{itemize}
-		\item $K$ – liczbę neuronów w warstwie
-		\item $L$ – liczba sygnałów wejściowych
-	\end{itemize}
-	\item wektor przesunieć \textbf{b}:
+	\item wektor przesunieć \textbf{b}
 \end{itemize}
-\begin{equation*}
-	b =
-	\begin{bmatrix}
-		b_{1} & b_{2} & \dots & b_{K}
-	\end{bmatrix}^{T}
-\end{equation*}
 \begin{itemize}[resume]
 	\item funkcje aktywacji \textbf{f}
-	\item oraz wektor sygnałów wyjściowych \textbf{y}:
+	\item oraz wektor sygnałów wyjściowych \textbf{y}
 \end{itemize}
-\begin{equation*}
-	y =
-	\begin{bmatrix}
-		y_{1} & y_{2} & \dots & y_{K}
-	\end{bmatrix}^{T}
-\end{equation*}
 W celu obliczenia sygnału wyjściowego sieci wielowarstwowej uogólniony wzór na wyjście pojedynczej warstwy przedstawiający się jako:
 \begin{equation}
 	y^{(n)}=f^{(n)}(w^{(n)}y^{(n-1)}+b^{(n)})
@@ -228,13 +202,13 @@ gdzie $n$ to numer odpowiedniej warstwy.
 
 Dla przykładu dla przedstawionej sieci~\ref{Fig:model_sieci} wzory opisujące wyjścia poszczególnych warstw przyjmą postać:
 \begin{equation}
-	y^{(1)} &= f^{(1)}(w^{(1)}x+b^{(1)})
+	y^{(1)} = f^{(1)}(w^{(1)}x+b^{(1)})
 \end{equation}
 \begin{equation}
-	y^{(2)} &= f^{(2)}(w^{(2)}y^{(1)}+b^{(2)})
+	y^{(2)} = f^{(2)}(w^{(2)}y^{(1)}+b^{(2)})
 \end{equation}
 \begin{equation}
-	y^{(3)} &= f^{(3)}(w^{(3)}y^{(2)}+b^{(3)})
+	y^{(3)} = f^{(3)}(w^{(3)}y^{(2)}+b^{(3)})
 \end{equation}
 Na podstawie powyższych równań sygnał wyjściowy całej sieci~\ref{Fig:model_sieci} można opisać wzorem:
 \begin{equation}
@@ -243,13 +217,124 @@ Na podstawie powyższych równań sygnał wyjściowy całej sieci~\ref{Fig:model
 \end{equation}
 \newpage
 \subsection{Uczenie sieci pod nadzorem (supervised learning)}
+Uczenie z nadzorem polega na wprowadzaniu do systemu uczącego się próbki danych (danych uczących) posiadającej pary danych w postaci tzw. wektora wejściowego i wektora wyjściowego, gdzie:
+\begin{itemize}
+	\setlength\itemsep{0em}
+	\setlength{\parskip}{0pt}
+	\item wektor wejściowy - wektor podawany na wejście sieci
+	\item wektor wyjściowy - wektor oczekiwanych wartości na wyjściu sieci
+\end{itemize}
+Zatem ten sposób uczenia zakłada, że każdemu wektorowi wejściowemu towarzyszy wektor wyjściowy. Taka para jest wykorzystywana w procesie uczenia, a dokładnie zmiany wag i biasów neuronów w kolejnych jego cyklach.
+W sieci nienauczonej w większości przypadków sygnał wyjściowy $y$ będzie inny niż oczekiwany $\hat{y}$. Taki błąd nazywa się funkcją straty, która według wzoru dla pojedynczego neuronu wyjściowego przedstawić można jako:
+\begin{equation}
+	e_{i}=y_{i}-\hat{y_{i}}
+\end{equation}
+Funkcja straty w poźniejszej fazie wykorzystywana jest do obliczenia wartości tzw. funkcji kosztu, która w bezpośredni sposób bierze udział w procesie uczenia. Najczęsciej stosowaną funkcją kosztu dla klasyfikacji to:
+\begin{itemize}
+	\item SSE (Sum Squared Error) - sumaryczny błąd kwadratowy:
+\end{itemize}
+\begin{equation}
+	E = \frac{1}{2} \sum_{i=1}^{K} e_{i}^{2}
+\end{equation}
+gdzie:
+\begin{itemize}
+	\setlength\itemsep{0em}
+	\setlength{\parskip}{0pt}
+	\item $i$ - numer neuronu w warstwie wyjściowej
+	\item $K$ - ilość neuronów w warstwie wyjściowej.
+\end{itemize}
+Korzystając z wzoru opisującego sygnał wyjściowy sieci~\ref{Eq:y_sieci} można przedstawić pełne rozwinięcie funkcji celu:
+\begin{equation}
+	\begin{aligned}
+		E &= \frac{1}{2} \sum_{i_3=1}^{K_3}e_{i_3}^2
+		= \frac{1}{2} \sum_{i_3=1}^{K_3}(y_{i_3}^{(3)} - \hat{y_{i_3}})^2\\
+		&= \frac{1}{2} \sum_{i_3=1}^{K_3}(f^{(3)}(w^{(3)}f^{(2)}(w^{(2)}f^{(1)}(w^{(1)}x+b^{(1)})+b^{(2)})+b^{(3)}) - \hat{y_{i_3}})^2\\
+		&= \frac{1}{2}\sum_{i_3=1}^{K_3}(f^{(3)}(\sum_{i_2=1}^{K_2}w_{i_3i_2}^{(3)}y_{i_2}+b_{i_3}^{(3)}) - \hat{y_{i_3}})^2\\
+		&= \frac{1}{2}\sum_{i_3=1}^{K_3}(
+		f^{(3)}(\sum_{i_2=1}^{K_2}w_{i_3i_2}^{(3)}f^{(2)}(
+		\sum_{i_1=1}^{K_1}w_{i_2i_1}^{(2)}y_{i_1}+b_{i_2}^{(2)}
+		)+b_{i_3}^{(3)}) - \hat{y_{i_3}})^2\\
+		&= \frac{1}{2}\sum_{i_3=1}^{K_3}(
+		f^{(3)}(\sum_{i_2=1}^{K_2}w_{i_3i_2}^{(3)}f^{(2)}(
+		\sum_{i_1=1}^{K_1}w_{i_2i_1}^{(2)}
+		f^{(1)}(\sum_{j=1}^{L}w_{i_1j}^{(1)}x_j+b_{i_1}^{(1)})
+		+b_{i_2}^{(2)}
+		)+b_{i_3}^{(3)})
+		- \hat{y_{i_3}})^2
+	\end{aligned}
+	\label{Eq:funkcja_celu}
+\end{equation}
+gdzie:
+\begin{itemize}
+	\setlength\itemsep{0em}
+	\setlength{\parskip}{0pt}
+	\item $j = 1,\dots,L$ numer wejścia warstwy I
+	\item $j_1=1,\dots,K_1$, $j_1=1,\dots,K_1$, $j_1=1,\dots,K_1$ odpowiednio numer wyjścia warstwy~I,~II,~III
+\end{itemize}
+\newpage
+
 \subsection{Algorytm wstecznej propagacji błędu}
+Podczas uczenia sieci neuronowych celem każdego zastosowanego algorytmu jest modyfikowanie wag danego neuronu w taki sposób, aby na wyjściu sieć popełniała jak najmniejszy błąd. Obecnie najbardziej rozpowszechnione są dwa rodzaje / sposoby uczenia sieci. Pierwszy sposób polega na aktulizacji wag po przejściu wszystkich danych uczących. Drugi natomiast za pomocą gradientów i reguły łańcuchowej
+powracaniu do początku sieci i rozkładaniu odpowiednio wartości błędów próbując poprawić wagi. Proces ten nazwę propagacji wstecznej.
+
+Na początku jedyną rzeczą jaką można wyznaczyć to błędy neuronów warstwy wyjściowej na podstawie danych wyjściowych i danych docelowych zawartych w zbiorze uczącym. Kolejne błędy w warstwach wcześniejszych niż wyjściowa będą określane dzięki algorytmowi wstecznej propagacji.
+Wzór umożliwiający obliczenie zmiany wagi przedstawia się jako:
+\begin{equation}
+	\Delta w_{ij} = - \eta\frac{\partial E}{\partial w_{ij}}
+	\label{Eq:delta_wagi}
+\end{equation}
+gdzie $\eta$ oznacza wartość współczynnika uczenia
+Opisując algorytm można dojść do wniosku, że należy on do metod gradientowych, gdyż jego założenie opiera sie na stwierdzeniu, że gradient funkcji wskazuje na kierunek jej najszybszego wzrostu, a przy zmianie znaku na przeciwny kierunek jej najszybszego spadku.
+Zakładając, że każda zmiana wagi zależy od danej chwili uczenia $t$ (tutaj zwykle epoki) wartość danej wagi można zapisać jako:
+\begin{equation}
+	w_{ij}(t+1) = w_{ij}(t)+\Delta w_{ij}
+\end{equation}
+Podstawienie równania~\ref{Eq:delta_wagi} pozwala na przekształcenie powyższego wzoru do postaci:
+\begin{equation}
+	w_{ij}(t+1) = w_{ij}(t) - \eta\frac{\partial E}{\partial w_{ij}}
+\end{equation}
+Przy obliczaniu gradientu dla danej wagi, napotyka się problem o niemożności określenia go za pomocą bezpośrednich obliczeń, dlatego też najpierw należy określić wygląd poszczególnych pochodnych cząstkowych z zależności~\ref{Eq:funkcja_celu}, a następnie na ich podstawie odpowiadający danej wadze gradient:
+\begin{itemize}
+	\item dla warstwy wyjściowej:
+\end{itemize}
+\begin{equation}
+	\frac{\partial E}{\partial w_{i_3i_2}^{(3)}}= \frac{\partial E}{\partial f^{(3)}}\frac{\partial f^{(3)}(z_{i_3}^{(3)})}{\partial z_{i_3}^{(3)}}\frac{\partial z_{i_3}^{(3)}}{\partial w_{i_3i_2}^{(3)}} = (y_{i_3} - \hat{y_{i_3}}) \frac{\partial f^{(3)}(z_{i_3}^{(3)})}{\partial z_{i_3}^{(3)}}y_{i_2}^{(2)}
+\end{equation}
+gdzie: $z_{i_3}^{(3)} = \sum_{i_2=1}^{K_2} w_{i_3i_2}^{(3)}y_{i_2}+b_{i_3}^{(3)}$ - pobudzenie $i_3$-ego neuronu warstwy wyjściowej.
+
+\begin{itemize}[resume]
+	\item dla warstwy ukrytej:
+\end{itemize}
+\begin{equation}
+	\begin{aligned}
+		\frac{\partial E}{\partial w_{i_2i_1}^{(3)}}&= \frac{\partial E}{\partial f^{(3)}}\frac{\partial f^{(3)}(z_{i_3}^{(3)})}{\partial z_{i_3}^{(3)}}\frac{\partial z_{i_3}^{(3)}}{\partial f^{(2)}} \frac{\partial f^{(2)}(z_{i_2}^{(2)})}{\partial z_{i_2}^{(2)}}\frac{\partial z_{i_2}^{(2)}}{\partial w_{i_2i_1}^{(2)}}\\
+		&= \sum_{i_3=1}^{K_3} (y_{i_3} - \hat{y_{i_3}}) \frac{\partial f^{(3)}(z_{i_3}^{(3)})}{\partial z_{i_3}^{(3)}} w_{i_3i_2}^{(3)}
+		\frac{\partial f^{(2)}(z_{i_2}^{(2)})}{\partial z_{i_2}^{(2)}} y_{i_1}^{(1)}
+	\end{aligned}
+\end{equation}
+
+\begin{itemize}[resume]
+	\item dla warstwy wejściowej:
+\end{itemize}
+\begin{equation}
+	\begin{aligned}
+		\frac{\partial E}{\partial w_{i_1j}^{(3)}}&= \frac{\partial E}{\partial f^{(3)}}\frac{\partial f^{(3)}(z_{i_3}^{(3)})}{\partial z_{i_3}^{(3)}}\frac{\partial z_{i_3}^{(3)}}{\partial f^{(2)}} \frac{\partial f^{(2)}(z_{i_2}^{(2)})}{\partial z_{i_2}^{(2)}}\frac{\partial z_{i_2}^{(2)}}{\partial f^{(1)}}
+		\frac{\partial f^{(1)}(z_{i_1}^{(1)})}{\partial z_{i_1}^{(1)}}\frac{\partial z_{i_1}^{(1)}}{\partial w_{i_1j}^{(1)}}\\
+		&= \sum_{i_3=1}^{K_3} (y_{i_3} - \hat{y_{i_3}}) \frac{\partial f^{(3)}(z_{i_3}^{(3)})}{\partial z_{i_3}^{(3)}} \sum_{i_2=1}^{K_2} w_{i_3i_2}^{(3)}
+		\frac{\partial f^{(2)}(z_{i_2}^{(2)})}{\partial z_{i_2}^{(2)}} w_{i_2i_1}^{(2)} \frac{\partial f^{(1)}(z_{i_1}^{(1)})}{\partial z_{i_1}^{(1)}} x_j
+	\end{aligned}
+\end{equation}
+\newpage
 
 \clearpage
 
 \section{Realizacja sieci}
 
 \subsection{Opis skryptu}
+
+Na potrzeby realizacji sieci neuronowej stworzono skrypt w języku Python umożliwiającą w prosty sposób zrealizować dowolną sieć neuronową uczoną metodą wstecz nej propagracji błędu.
+Skrypt został podzielony na 3 pliki: network.py, data.py oraz main.py.
+Skrypt data.py miał za zadanie prygotować dane pobrane ze zbioru danych do optymalnego formatu dla sieci neuronowej. Skrypt network.py zawierał cały kod sieci neuronowej, natomiast skrypt main.py łączył 2 wcześniej wspomniane skrypty.
 
 \begin{lstlisting}[caption={Plik przygotowujący dane- data.py},label={Lst:data_py},language=Python,basicstyle=\scriptsize]
 from sklearn.model_selection import train_test_split
@@ -455,15 +540,137 @@ def sigmoid_prime(z):
 
 \section{Eksperymenty}
 \subsection{Eksperyment 1}
-Celem pierwszego eksperymentu
+Celem pierwszego eksperymentu było sprawdzenie jak wielkość partii danych uczących wpływa na szybkość uczenia się sieci.
+W tym eksperymencie parametry sieci jednowarstwowej były następujące:
+\begin{itemize}
+	\item epoki - 10000
+	\item learning rate - 0,3
+	\item target error - 0,179
+\end{itemize}
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=15cm]{figures/batch_epo.png}
+	\caption{Wykres do eksperymentu pierwszego}
+\end{figure}
+Z powyższego wykresu możemy zauważyć, iż batch size wielkości 1 wypada najlepiej pod kątem szybkości uczenia się sieci.
+\newpage
+
+
 
 \subsection{Eksperyment 2}
+Celem drugiego eksperymentu było sprawdzenie jak learning rate wpływa na szybkość uczenia się sieci.
+W tym eksperymencie parametry sieci jednowarstwowej były następujące:
+\begin{itemize}
+	\item epoki - 10000
+	\item batch size - 1
+	\item target error - 0,18
+\end{itemize}
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=15cm]{figures/eta_epo.png}
+	\caption{Wykres do eksperymentu drugiego}
+\end{figure}
+\newpage
+
 \subsection{Eksperyment 3}
+Celem trzeciego eksperymentu było sprawdzenie jak błąd docelowy wpływa na szybkość uczenia się sieci.
+W tym eksperymencie parametry sieci jednowarstwowej były następujące:
+\begin{itemize}
+	\item epoki - 10000
+	\item learning rate - 0,01
+	\item batch size - 1
+\end{itemize}
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=15cm]{figures/target_epo_eta=0_01.png}
+	\caption{Wykres do eksperymentu trzeciego}
+\end{figure}
+\newpage
+
 \subsection{Eksperyment 4}
+Celem czwartego eksperymentu było sprawdzenie jak błąd docelowy wpływa na szybkość uczenia się sieci.
+W tym eksperymencie parametry sieci jednowarstwowej były następujące:
+\begin{itemize}
+	\item epoki - 10000
+	\item learning rate - 0,1
+	\item batch size - 1
+\end{itemize}
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=15cm]{figures/target_epo_eta=0_1.png}
+	\caption{Wykres do eksperymentu czwartego}
+\end{figure}
+\newpage
+
 \subsection{Eksperyment 5}
+Celem piątego eksperymentu było sprawdzenie jak ilość neuronów w pierwszej wartstwie wpływa na szybkość uczenia się sieci.
+W tym eksperymencie parametry sieci dwuwarstwowej były następujące:
+\begin{itemize}
+	\item epoki - 10000
+	\item learning rate - 0,1
+	\item batch size - 1
+	\item target error - 0,18
+\end{itemize}
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=15cm]{figures/S1_epo.png}
+	\caption{Wykres do eksperymentu piątego}
+\end{figure}
+\newpage
+
 \subsection{Eksperyment 6}
+Celem szóstego eksperymentu było sprawdzenie jak ilość neuronów w drugiej wartstwie wpływa na szybkość uczenia się sieci.
+W tym eksperymencie parametry sieci trójwarstwowej były następujące:
+\begin{itemize}
+	\item epoki - 10000
+	\item learning rate - 0,1
+	\item batch size - 1
+	\item target error - 0,18
+	\item S1 - 1
+\end{itemize}
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=15cm]{figures/S1=1_S2_epo.png}
+	\caption{Wykres do eksperymentu szóstego}
+\end{figure}
+\newpage
+
 \subsection{Eksperyment 7}
+Celem siódmego eksperymentu było sprawdzenie jak ilość neuronów w drugiej wartstwie wpływa na szybkość uczenia się sieci.
+W tym eksperymencie parametry sieci trójwarstwowej były następujące:
+\begin{itemize}
+	\item epoki - 10000
+	\item learning rate - 0,1
+	\item batch size - 1
+	\item target error - 0,18
+	\item S1 - 2
+\end{itemize}
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=15cm]{figures/S1=2_S2_epo.png}
+	\caption{Wykres do eksperymentu siódmego}
+\end{figure}
+\newpage
+
 \subsection{Eksperyment 8}
+Celem ósmego eksperymentu było sprawdzenie jak ilość neuronów w pierwszej i drugiej wartstwie wpływa na szybkość uczenia się sieci.
+W tym eksperymencie parametry sieci trójwarstwowej były następujące:
+\begin{itemize}
+	\item epoki - 10000
+	\item learning rate - 0,1
+	\item batch size - 1
+	\item target error - 0,18
+\end{itemize}
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=15cm]{figures/S1=2+_S2=2+_epo.png}
+	\caption{Wykres do eksperymentu ósmego}
+\end{figure}
+\newpage
 
 
 \clearpage

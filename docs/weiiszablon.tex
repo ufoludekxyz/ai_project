@@ -46,15 +46,133 @@
 
 \section{Wstęp}
 \subsection{Cel projektu}
+
+Głównym założeniem projektu jest realizacja sieci neuronowej uczonej za pomocą algorytmu wstecznej propagacji błędu, której zadaniem jest zdiagnozowanie zapalenia nerek lub zapalenia pęcherza na podstawie pewnych danych wejściowych.
+W ramach projektu zbadano wpływ poszczególnych parametrów sieci na proces jej uczenia:
+\begin{itemize}
+\item S1 - ilość neuronów w I warstwy ukrytej
+\item S2 - ilość neuronów w II warstwy ukrytej
+\item lr (learning rate) / eta - wartość współczynnika uczenia
+\item target error - maksymalny docelowy błąd sieci 
+\end{itemize}
+Jako zbiór danych uczących wykorzystano zbiór "Acute Inflammations”, a sama sieć została zrealizowana przy użyciu języka programowania Python.
+\newpage
+
 \subsection{Opis problemu}
+Realizowana sieć na podstawie podanych informacji wejściowych ma za zadanie sklasyfikować, do której klasy należą te dane i na wyjściu podać informacje o rodzaju zdiagnowzowanej choroby.
+W zbiorze danych uczących występuje 4 możliwe klasy:
+\begin{itemize}
+	\item brak chorób
+	\item występuje zapalenie nerek
+	\item występuje zapalenie pęcherza 
+	\item występuje jednocześnie zapalenie pęcherza i nerek
+\end{itemize}
+
 \subsection{Opis zestawu danych}
+Zestaw danych uczących został pobrany ze strony:
+
+\textbf{https://archive.ics.uci.edu/ml/datasets/Acute+Inflammations}
+ 
+Zbiór danych uczących zawiera 120 rekordów po 6 atrybutów w każdym wierszu.
+W przypadku atrybutów, będących parametrami wejściowymi są to:
+\begin{itemize}
+\item a1 - Temperatura pacjenta
+\item a2 - Zawroty głowy
+\item a3 - Ból lędzwiowy
+\item a4 - Ciągła potrzeba oddania moczu
+\item a5 - Bóle mikcyjne
+\item a6 - Pieczenie cewki moczowej
+\end{itemize}
+
+Oraz dwie możliwe decyzje wyjściowe:
+\begin{itemize}
+	\item d1 - Zapalenie pęcherza
+	\item d2 - Zapalenie nerek
+\end{itemize}
+
 \subsection{Przygotowanie danych}
+Badany zestaw danych nie zawiera niekompletnych rekordów, oraz wartości niepoprawnych, dlatego też podczas przygotowywania danych nie napotkano żadnych nieprzewidzianych błędów.
+
+W celu ujednolicenia danych do poźniejszego przetwarzania na danych przeprowadzono normalizację zgodnie z poniższym wzorem:
+\begin{equation}
+    x_{norm}=\frac{x-x_{min}}{x_{max}-x_{min}}
+    \label{Eq:normalizacja}
+\end{equation}
+gdzie:
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item $x_{norm}$ - wartość po normalizacji
+    \item $x$ - wartośc przed normalizacją
+    \item $x_{min}$ - minimalna wartość w zbiorze
+    \item $x_{max}$ – maksymalna wartość w zbiorze
+\end{itemize}
+Dzięki zastosowaniu wzoru~\ref{Eq:normalizacja} pierwotne dane wejściowe każdego rekordu zostały zamienione na odpowiadające im wartości z zakresu od 0 do 1.
 
 \clearpage
 
 \section{Zagadnienia teorytyczne}
 \subsection{Model sztucznego neuronu}
+Każda sieć neuronowa składa się z połączonych między sobą pojedynczych neuronów. Należy zatem zapoznać się z modelem pojedynczego neuronu w celu zrozumienia problemu sieci neuronowych. Przykładowy model pojedynczego neuronu został przedstawiony na rysunku~\ref{Fig:neuron}
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=12cm]{figures/model_neuronu.png}
+	\caption{Model pojedynczego neuronu}
+	\label{Fig:neuron}
+\end{figure}
+
+Każdy neuron to układ składający się z wielu wejść i jednego wyjścia. Wszystkie wejścia posiadają tzw. współczynnik wagowy, który określa jak bardzo dane wejście wpływa na rezultat wynikowy danego neuronu. Oprócz wagi dodatkowym elementem wejściowych jest również bias, umożliwiający przesunięcie funkcji aktywacji w lewo lub w prawo danego neuronu.
+Całość z poprzednio podanych informacji do wejść neuronu trafia do sumatora gdzie odbywa się proces wyznaczania łącznego pobudzenia
+neuronu, wyrażanego z następującego wzoru~\ref{Eq:pobudzenie}:
+\begin{equation}
+	z = \sum_{j=1}^{L} w_{j}x_{j}+b
+	\label{Eq:pobudzenie}
+\end{equation}
+Wyznaczona wartość następnie trafia do funkcji aktywacji, gdzie określany jest sygnał wyjściowy neuronu zgodnie z zależnością \ref{Eq:aktywacja}:
+\newpage
+\begin{equation}
+	y = f(z) = f(\sum_{j=1}^{L} w_{j}x_{j}+b)
+	\label{Eq:aktywacja}
+\end{equation}
+gdzie:
+\begin{itemize}
+	\item $y$ - wyjście neuronu
+	\item $x_{j}$ - \textit{j}-ty sygnał wejściowy (\textit{j=1,2,\dots,L})
+	\item $w_{j}$ - waga \textit{j}-tego wejścia
+	\item $b$ - bias
+\end{itemize}
 \subsection{Funkcja aktywacji}
+Każda warstwa w swoich neuronach może wykorzystywać inną funkcję aktywacji.
+W przypadku sieci jednokierunkowych najbardziej powszechna jest funkcja sigmoidalna, w której wyróżnić można dwa typy:
+\begin{itemize}
+	\item unipolarna funkcja aktywacji, która przyjmuje wartości w przedziału (0,1):
+\end{itemize}
+\begin{equation}
+	f(x) = \frac{1}{1+e^{-x}}
+	\label{Eq:unipolar_sigmoid}
+\end{equation}
+\begin{itemize}[resume]
+	\item bipolarna funkcja aktywacji, przyjmująca wartości z przedziału (-1,1):
+\end{itemize}
+\begin{equation}
+	f(x) = \frac{2}{1+e^{-x}} - 1
+	\label{Eq:bipolar_sigmoid}
+\end{equation}
+Funkcje te są różniczkowalne i ich pochodne wyrazić można jako:
+\begin{itemize}
+	\item w przypadku unipolarnej funkcji aktywacji:
+\end{itemize}
+\begin{equation}
+	f(x) = \frac{1}{1+e^{-x}}(1-\frac{1}{1+e^{-x}})
+	\label{Eq:unipolar_sigmoid_pochodna}
+\end{equation}
+\begin{itemize}[resume]
+	\item w przypadku bipolarnej funkcji aktywacji:
+\end{itemize}
+\begin{equation}
+	f(x) = 1 - (\frac{2}{1+e^{-x}})^2
+	\label{Eq:bipolar_sigmoid_pochodna}
+\end{equation}
+\newpage
 \subsection{Model sieci wielowarstwowej}
 \subsection{Uczenie sieci pod nadzorem (supervised learning)}
 \subsection{Algorytm wstecznej propagacji błędu}

@@ -8,18 +8,18 @@
 \contentsline {subsection}{\numberline {2.1}Model sztucznego neuronu}{\footnotesize 8}{}%
 \contentsline {subsection}{\numberline {2.2}Funkcja aktywacji}{\footnotesize 9}{}%
 \contentsline {subsection}{\numberline {2.3}Model sieci wielowarstwowej}{\footnotesize 10}{}%
-\contentsline {subsection}{\numberline {2.4}Uczenie sieci pod nadzorem (supervised learning)}{\footnotesize 10}{}%
-\contentsline {subsection}{\numberline {2.5}Algorytm wstecznej propagacji błędu}{\footnotesize 10}{}%
-\contentsline {section}{\numberline {3}Realizacja sieci}{\footnotesize 11}{}%
-\contentsline {subsection}{\numberline {3.1}Opis skryptu}{\footnotesize 11}{}%
-\contentsline {section}{\numberline {4}Eksperymenty}{\footnotesize 16}{}%
-\contentsline {subsection}{\numberline {4.1}Eksperyment 1}{\footnotesize 16}{}%
-\contentsline {subsection}{\numberline {4.2}Eksperyment 2}{\footnotesize 16}{}%
-\contentsline {subsection}{\numberline {4.3}Eksperyment 3}{\footnotesize 16}{}%
-\contentsline {subsection}{\numberline {4.4}Eksperyment 4}{\footnotesize 16}{}%
-\contentsline {subsection}{\numberline {4.5}Eksperyment 5}{\footnotesize 16}{}%
-\contentsline {subsection}{\numberline {4.6}Eksperyment 6}{\footnotesize 16}{}%
-\contentsline {subsection}{\numberline {4.7}Eksperyment 7}{\footnotesize 16}{}%
-\contentsline {subsection}{\numberline {4.8}Eksperyment 8}{\footnotesize 16}{}%
-\contentsline {section}{\numberline {5}Wnioski}{\footnotesize 17}{}%
-\contentsline {section}{Literatura}{\footnotesize 18}{}%
+\contentsline {subsection}{\numberline {2.4}Uczenie sieci pod nadzorem (supervised learning)}{\footnotesize 12}{}%
+\contentsline {subsection}{\numberline {2.5}Algorytm wstecznej propagacji błędu}{\footnotesize 12}{}%
+\contentsline {section}{\numberline {3}Realizacja sieci}{\footnotesize 13}{}%
+\contentsline {subsection}{\numberline {3.1}Opis skryptu}{\footnotesize 13}{}%
+\contentsline {section}{\numberline {4}Eksperymenty}{\footnotesize 18}{}%
+\contentsline {subsection}{\numberline {4.1}Eksperyment 1}{\footnotesize 18}{}%
+\contentsline {subsection}{\numberline {4.2}Eksperyment 2}{\footnotesize 18}{}%
+\contentsline {subsection}{\numberline {4.3}Eksperyment 3}{\footnotesize 18}{}%
+\contentsline {subsection}{\numberline {4.4}Eksperyment 4}{\footnotesize 18}{}%
+\contentsline {subsection}{\numberline {4.5}Eksperyment 5}{\footnotesize 18}{}%
+\contentsline {subsection}{\numberline {4.6}Eksperyment 6}{\footnotesize 18}{}%
+\contentsline {subsection}{\numberline {4.7}Eksperyment 7}{\footnotesize 18}{}%
+\contentsline {subsection}{\numberline {4.8}Eksperyment 8}{\footnotesize 18}{}%
+\contentsline {section}{\numberline {5}Wnioski}{\footnotesize 19}{}%
+\contentsline {section}{Literatura}{\footnotesize 20}{}%

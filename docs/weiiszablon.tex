@@ -174,6 +174,74 @@ Funkcje te są różniczkowalne i ich pochodne wyrazić można jako:
 \end{equation}
 \newpage
 \subsection{Model sieci wielowarstwowej}
+W każdej sieci jednokierunkowej wielowarstwowej wyróżnić można nastepujące warstwy: wejścia, wyścia i występujące pomiędzy nimi warstwy ukryte.
+W przypadku sieci jednokierunkowej dane mogą przepływać tylko w jednym kierunku od warstwy wejścia do warstwy wyjścia.
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=12cm]{figures/model_sieci.png}
+	\caption{Model sieci jednokierunkowej wielowarstwowej}
+	\label{Fig:model_sieci}
+\end{figure}
+
+Każda pojedyncza warstwa neuronów posiada:
+\begin{itemize}
+	\item macierz wag \textbf{w}:
+\end{itemize}
+\begin{equation*}
+	w =
+	\begin{bmatrix}
+		w_{11} & w_{12} & \dots & w_{1L}\\
+		w_{21} & w_{22} & \dots & w_{2L}\\
+		\vdots & \vdots &  & \vdots\\
+		w_{K1} & w_{K2} & \dots & w_{KL}
+	\end{bmatrix}
+\end{equation*}
+gdzie:
+\begin{itemize}[resume]
+	\begin{itemize}
+		\item $K$ – liczbę neuronów w warstwie
+		\item $L$ – liczba sygnałów wejściowych
+	\end{itemize}
+	\item wektor przesunieć \textbf{b}:
+\end{itemize}
+\begin{equation*}
+	b =
+	\begin{bmatrix}
+		b_{1} & b_{2} & \dots & b_{K}
+	\end{bmatrix}^{T}
+\end{equation*}
+\begin{itemize}[resume]
+	\item funkcje aktywacji \textbf{f}
+	\item oraz wektor sygnałów wyjściowych \textbf{y}:
+\end{itemize}
+\begin{equation*}
+	y =
+	\begin{bmatrix}
+		y_{1} & y_{2} & \dots & y_{K}
+	\end{bmatrix}^{T}
+\end{equation*}
+W celu obliczenia sygnału wyjściowego sieci wielowarstwowej uogólniony wzór na wyjście pojedynczej warstwy przedstawiający się jako:
+\begin{equation}
+	y^{(n)}=f^{(n)}(w^{(n)}y^{(n-1)}+b^{(n)})
+\end{equation}
+gdzie $n$ to numer odpowiedniej warstwy.
+
+Dla przykładu dla przedstawionej sieci~\ref{Fig:model_sieci} wzory opisujące wyjścia poszczególnych warstw przyjmą postać:
+\begin{equation}
+	y^{(1)} &= f^{(1)}(w^{(1)}x+b^{(1)})
+\end{equation}
+\begin{equation}
+	y^{(2)} &= f^{(2)}(w^{(2)}y^{(1)}+b^{(2)})
+\end{equation}
+\begin{equation}
+	y^{(3)} &= f^{(3)}(w^{(3)}y^{(2)}+b^{(3)})
+\end{equation}
+Na podstawie powyższych równań sygnał wyjściowy całej sieci~\ref{Fig:model_sieci} można opisać wzorem:
+\begin{equation}
+	y^{(3)}=f^{(3)}(w^{(3)}f^{(2)}(w^{(2)}f^{(1)}(w^{(1)}x+b^{(1)})+b^{(2)})+b^{(3)})
+	\label{Eq:y_sieci}
+\end{equation}
+\newpage
 \subsection{Uczenie sieci pod nadzorem (supervised learning)}
 \subsection{Algorytm wstecznej propagacji błędu}
 

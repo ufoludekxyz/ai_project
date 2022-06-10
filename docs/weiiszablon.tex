@@ -1,0 +1,302 @@
+%%%%%
+
+\documentclass[12pt,twoside]{article}
+
+\usepackage{weiiszablon}
+
+\author{Karol Dudek}
+
+% np. EF-123456, EN-654321, ...
+\studentID{EF-167695}
+
+\title{Realizacja sieci neuronowej uczonej algorytmem wstecznej propagacji błędu ucząca się rozpoznawać rodzaj schorzenia u pacjenta na podstawie wyników jego badań.}
+\titleEN{Temat pracy po angielsku}
+
+
+%%% wybierz rodzaj pracy wpisując jeden z poniższych numerów: ...
+% 1 = inżynierska	% BSc
+% 2 = magisterska	% MSc
+% 3 = doktorska		% PhD
+%%% na miejsce zera w linijce poniżej
+\newcommand{\rodzajPracyNo}{4}
+
+
+%%% promotor
+\supervisor{dr hab. inż. Roman Zajdel, prof. PRz}
+%% przykład: dr hab. inż. Józef Nowak, prof. PRz
+
+%%% promotor ze stopniami naukowymi po angielsku
+\supervisorEN{(academic degree) Imię i nazwisko opiekuna}
+
+\abstract{Treść streszczenia po polsku}
+\abstractEN{Treść streszczenia po angielsku}
+
+\begin{document}
+
+% strona tytułowa
+\maketitle
+
+\blankpage
+
+% spis treści
+\tableofcontents
+
+\clearpage
+\blankpage
+
+\section{Wstęp}
+\subsection{Cel projektu}
+\subsection{Opis problemu}
+\subsection{Opis zestawu danych}
+\subsection{Przygotowanie danych}
+
+\clearpage
+
+\section{Zagadnienia teorytyczne}
+\subsection{Model sztucznego neuronu}
+\subsection{Funkcja aktywacji}
+\subsection{Model sieci wielowarstwowej}
+\subsection{Uczenie sieci pod nadzorem (supervised learning)}
+\subsection{Algorytm wstecznej propagacji błędu}
+
+\clearpage
+
+\section{Realizacja sieci}
+
+\subsection{Opis skryptu}
+
+\begin{lstlisting}[caption={Plik przygotowujący dane- data.py},label={Lst:data_py},language=Python,basicstyle=\scriptsize]
+from sklearn.model_selection import train_test_split
+from csv import reader
+import numpy as np
+
+# Import function
+def dataImport(name):
+    with open(name, 'r', encoding='utf-16') as file:
+        return [line for line in reader(file, delimiter='\t')]
+
+# Normalization function
+def normalizeMinMax(table):
+    for row in range(0, len(table)):
+        min_val, max_val = min(table[row]), max(table[row])
+        table[row] = [(1 - 0) * (col - min_val) / (max_val - min_val) for col in table[row]]
+    return table
+
+# Data loader function
+def loadData():
+    # Import acute.tsv to dataFile
+    dataFile = dataImport('acute.tsv')
+
+    # Create numpy array from dataList
+    dataFile = np.array(dataFile)
+
+    # Convert array of strings to array of floats
+    dataFile = dataFile.astype(float)
+
+    # Data normalization
+    dataFile = normalizeMinMax(dataFile.T).T
+
+    # Data splitting into training and test data
+    trainData, testData = train_test_split(dataFile, test_size=0.2, random_state=25)
+
+    # Splitting data into 2 groups, inputData and outputdata
+    testIn, testOut = testData[:,:6], testData[:,6:]
+    trainIn, trainOut = trainData[:,:6], trainData[:,6:]
+
+    # Combining inputData and outputData in a single tuple
+    trainData = [(np.array(trainIn[i], ndmin=2).T, np.array(trainOut[i], ndmin=2).T) for i in range(0, len(trainOut))]
+    testData = [(np.array(testIn[i], ndmin=2).T,np.array(testOut[i], ndmin=2).T) for i in range(0, len(testOut))]
+
+    return (trainData, testData)
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Plik zawierający sieć - network.py},label={Lst:network_py},language=Python,basicstyle=\scriptsize]
+import random
+import time
+import numpy as np
+
+class Network(object):
+
+    # Constructor, takes list of layers and amount of neurons as parameter
+    def __init__(self, sizes):
+
+        #Applying Seed
+        np.random.seed(7)
+
+        # Assing 'sizes' vector to amount of layers in the network
+        self.num_layers = len(sizes)
+        self.sizes = sizes
+
+        # Pseudo random generator used to assign weight and biases 
+        self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
+        self.weights = [np.random.randn(y, x)
+                        for x, y in zip(sizes[:-1], sizes[1:])]
+
+    def feedforward(self, a):
+
+        # Return neural network results for 'a' data
+        for b, w in zip(self.biases, self.weights):
+            a = sigmoid(np.dot(w, a)+b)
+        return a
+
+        # Mean Square Error
+    def mse(self,_test_data):
+        error=[pow(np.linalg.norm(self.feedforward(x)-y),2) for (x,y) in _test_data]
+        return 1/len(_test_data)*sum(error)
+
+    def SGD(self, training_data, epochs, mini_batch_size, eta,
+            error_target=0.001, test_data=None):
+
+        if test_data: n_test = len(test_data)
+        n = len(training_data)
+        for j in range(epochs):
+            time1 = time.time()
+            random.shuffle(training_data)
+            mini_batches = [
+                training_data[k:k+mini_batch_size]
+                for k in range(0, n, mini_batch_size)]
+            for mini_batch in mini_batches:
+                self.update_mini_batch(mini_batch, eta)
+            cur_err = self.mse(training_data)
+            time2 = time.time()
+            evalVal = self.evaluate(test_data)
+            evalAcc = (evalVal/n_test*100)
+            if cur_err < error_target or j == epochs-1:
+                if test_data:
+                    print("{0}, {2:.2f}, {3:.0f}%".format(
+                        j, cur_err, evalAcc))
+                    pass
+                else:
+                    print("Epoch {0} complete in {1:.2f} seconds".format(j, time2-time1))
+                break
+
+            print("{0}, {1:.6f}, {2:.0f}%".format(j, cur_err, evalAcc))
+
+    def update_mini_batch(self, mini_batch, eta):
+
+        # Updates weights and biases using SGD and backpropagation for each mini batch
+        nabla_b = [np.zeros(b.shape) for b in self.biases]
+        nabla_w = [np.zeros(w.shape) for w in self.weights]
+        for x, y in mini_batch:
+            # Calculate gradient increase for each (x, y) pair
+            delta_nabla_b, delta_nabla_w = self.backprop(x, y)
+
+            # Calculate new gradient
+            nabla_b = [nb+dnb for nb, dnb in zip(nabla_b, delta_nabla_b)]
+            nabla_w = [nw+dnw for nw, dnw in zip(nabla_w, delta_nabla_w)]
+
+        # New weights and biases
+        self.weights = [w-(eta/len(mini_batch))*nw
+                        for w, nw in zip(self.weights, nabla_w)]
+        self.biases = [b-(eta/len(mini_batch))*nb
+                       for b, nb in zip(self.biases, nabla_b)]
+
+    def backprop(self, x, y):
+
+        #Return tuple representing the gradient of the cost function
+        nabla_b = [np.zeros(b.shape) for b in self.biases]
+        nabla_w = [np.zeros(w.shape) for w in self.weights]
+
+        # feedforward
+        activation = x
+        activations = [x] # list to store all the activations, layer by layer
+        zs = [] # list to store all the z vectors, layer by layer
+        
+        # Calculate neuron activations
+        for b, w in zip(self.biases, self.weights):
+            z = np.dot(w, activation)+b
+            zs.append(z)
+            activation = sigmoid(z)
+            activations.append(activation)
+
+        # backward pass (gradient increase for output layer)
+        delta = self.cost_derivative(activations[-1], y) * \
+            sigmoid_prime(zs[-1])
+        nabla_b[-1] = delta
+        nabla_w[-1] = np.dot(delta, activations[-2].transpose())
+
+        # Calculate gradient increase for input and hidden layers
+        for l in range(2, self.num_layers):
+            z = zs[-l]
+            sp = sigmoid_prime(z)
+            delta = np.dot(self.weights[-l+1].transpose(), delta) * sp
+            nabla_b[-l] = delta
+            nabla_w[-l] = np.dot(delta, activations[-l-1].transpose())
+        return (nabla_b, nabla_w)
+
+    def evaluate(self, test_data):
+
+        test_results = [(self.feedforward(x), y)
+                        for (x, y) in test_data]
+
+                        # Approximation
+        return sum(int((y[0] == 0 and x[0] < 0.5) or (y[0] == 1 and x[0] > 0.5) and 
+                       (y[1] == 0 and x[1] < 0.5) or (y[1] == 1 and x[1] > 0.5)) 
+                   for (x, y) in test_results)
+
+    def cost_derivative(self, output_activations, y):
+        # Return vector with difference between the neuron and the expected result
+        return (output_activations-y)
+
+#### Miscellaneous functions
+def sigmoid(z):
+    # Sigmoid function
+    return 1.0/(1.0+np.exp(-z))
+
+def sigmoid_prime(z):
+    # Sigmoid prime function
+    return sigmoid(z)*(1-sigmoid(z))
+
+
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Plik wywołujący przykładową sieć - main.py},label={Lst:main_py},language=Python,basicstyle=\scriptsize]
+	import data
+	import network
+	
+	import numpy as np
+	
+	trainData, testData = data.loadData()
+	
+	# [input vector size, S1 neurons, S2 neurons, output]
+	net = network.Network([6,2])
+	
+	# (training_data, epochs, batch_size, eta, target, test_data)
+	net.SGD(trainData, 100000, 1, 0.1, error_target=0.179,test_data=testData)
+\end{lstlisting}
+
+\clearpage	
+
+\section{Eksperymenty}
+\subsection{Eksperyment 1}
+Celem pierwszego eksperymentu
+
+\subsection{Eksperyment 2}
+\subsection{Eksperyment 3}
+\subsection{Eksperyment 4}
+\subsection{Eksperyment 5}
+\subsection{Eksperyment 6}
+\subsection{Eksperyment 7}
+\subsection{Eksperyment 8}
+
+
+\clearpage
+
+\section{Wnioski}
+
+\clearpage
+
+\addcontentsline{toc}{section}{Literatura}
+
+\begin{thebibliography}{4}
+\bibitem{dataset} https://archive.ics.uci.edu/ml/datasets/Acute+Inflammations
+\bibitem{nielsen} Michael Nielsen, Neural Networks and Deep Learning.
+\bibitem{zajdel1} Zajdel.R „Ćwiczenie 6 Model Neuronu”, Rzeszów, KIiA, PRz
+\bibitem{zajdel2} Zajdel.R „Ćwiczenie 8 Sieć jednokierunkowa jednowarstwowa”, Rzeszów,KIiA,PRz
+\bibitem{zajdel3} Zajdel.R „Ćwiczenie 9 Sieć jednokierunkowa wielowarstwowa”, Rzeszów,KIiA,PRz
+\bibitem{tadusie} R.Tadeusiewicz, M.Szaleniec „Leksykon sieci neuronowych”
+\end{thebibliography}
+
+\clearpage
+
+\end{document} 

@@ -438,7 +438,7 @@ class Network(object):
                         j, cur_err, evalAcc))
                     pass
                 else:
-                    print("Epoch {0} complete in {1:.2f} seconds".format(j, time2-time1))
+                    print("Epoch {0} ".format(j))
                 break
 
             print("{0}, {1:.6f}, {2:.0f}%".format(j, cur_err, evalAcc))
@@ -572,6 +572,7 @@ W tym eksperymencie parametry sieci jednowarstwowej były następujące:
 	\includegraphics[width=15cm]{figures/eta_epo.png}
 	\caption{Wykres do eksperymentu drugiego}
 \end{figure}
+Z wykresu można zauważyć jak ilość epok potrzebnych do osiągniecia porządanej klasyfikacji spada wraz ze wzrostem learning rate.
 \newpage
 
 \subsection{Eksperyment 3}
@@ -588,6 +589,7 @@ W tym eksperymencie parametry sieci jednowarstwowej były następujące:
 	\includegraphics[width=15cm]{figures/target_epo_eta=0_01.png}
 	\caption{Wykres do eksperymentu trzeciego}
 \end{figure}
+Na wykresie możemy zauważyć spadek epok potrzebnych do osiągniecia porządanej klasyfikacji wraz ze wzrostem błędu docelowego.
 \newpage
 
 \subsection{Eksperyment 4}
@@ -604,6 +606,7 @@ W tym eksperymencie parametry sieci jednowarstwowej były następujące:
 	\includegraphics[width=15cm]{figures/target_epo_eta=0_1.png}
 	\caption{Wykres do eksperymentu czwartego}
 \end{figure}
+Tutaj został powtórzony eksperyment trzeci lecz ze zmienionym learning rate na wartość 0,1 w przeciwieństwu to poprzedniego 0,01.
 \newpage
 
 \subsection{Eksperyment 5}
@@ -620,6 +623,7 @@ W tym eksperymencie parametry sieci dwuwarstwowej były następujące:
 	\includegraphics[width=15cm]{figures/S1_epo.png}
 	\caption{Wykres do eksperymentu piątego}
 \end{figure}
+Na wykresie możemy zauważyć ewidenty spadek ilości epok potrzebnych do osiągniecia porządanej klasyfikacji wraz ze wzrostem ilości neuronów w warstwie S1, za wyjątkiem jednego wzrostu w przypadku 19 neuronów.
 \newpage
 
 \subsection{Eksperyment 6}
@@ -634,9 +638,10 @@ W tym eksperymencie parametry sieci trójwarstwowej były następujące:
 \end{itemize}
 \begin{figure}[ht!]
 	\centering
-	\includegraphics[width=15cm]{figures/S1=1_S2_epo.png}
+	\includegraphics[width=14cm]{figures/S1=1_S2_epo.png}
 	\caption{Wykres do eksperymentu szóstego}
 \end{figure}
+Pierwszy eksperyment zawierający sieć trójwarstwową, w tym eksperymencie chciałem sprawdzić jak sieć radzi sobie z nieoptymalną ilością neuronów w warstwie S1 (tylko jeden neuron), ilość neuronów w warstwie S2 jest natomiast zmienna w zakresie od 1 do 20.
 \newpage
 
 \subsection{Eksperyment 7}
@@ -654,6 +659,7 @@ W tym eksperymencie parametry sieci trójwarstwowej były następujące:
 	\includegraphics[width=15cm]{figures/S1=2_S2_epo.png}
 	\caption{Wykres do eksperymentu siódmego}
 \end{figure}
+Tutaj został powtórzony eksperyment siódmy lecz ilość neuronów w warstwie S1 wynosiła 2, co znacznie poprawiło szybkość uczenia się sieci.
 \newpage
 
 \subsection{Eksperyment 8}
@@ -670,6 +676,7 @@ W tym eksperymencie parametry sieci trójwarstwowej były następujące:
 	\includegraphics[width=15cm]{figures/S1=2+_S2=2+_epo.png}
 	\caption{Wykres do eksperymentu ósmego}
 \end{figure}
+W tym eksperymencie sprawdzam jak zmienna ilość neuronów w warstwie S1 i S2 w zakresie od 2 do 20 neuronów wpływa na szybkość uczenia się sieci. Możemy zauważyć, że już w przypadku 8 neuronów w obydwu warstwach sieć uczy się już bardzo szybko.
 \newpage
 
 

@@ -688,14 +688,18 @@ Celem projektu było zrealizowanie szutucznej sieci neuronowej uczonej algorytme
 
 Zbiór danych przeze mnie wykorzystywany okazał się być zbiorem liniowo separowalnym co wpłynęło na bardzo szybkie uczenie się sieci oraz pozwoliło na osiągnięcie 100\% poprawności klasyfikacji.
 
-Przeprowadzone przeze mnie eksperymenty pozwoliły określić najoptymalniejsze parametry sieci neuronowej pozwalające nauczyć sieć w jak najktrótrszym czasie zachowując przy tym jak największą dokładność. Finalnie w przypadku sieci jednowarstwowej najlepszymi parametrami okazały się:
+Przeprowadzone przeze mnie eksperymenty pozwoliły określić najoptymalniejsze parametry sieci neuronowej pozwalające nauczyć sieć w jak najktrótrszym czasie zachowując przy tym jak największą dokładność. Porównując różną ilość warstw oraz neuronów sieci dla mojego zestawu danych zauważyłem, że szybkość uczenia się sieci nie wzrastała wraz ze wzrostem ilości warstw oraz neuronów. Finalnie stwierdzono, że najoptymalniejszą konfigurajcą sieci będzie sieć jednowarstwowa z następującymi parametrami:
 \begin{itemize}
-	\item Ilosc neuronów w warstwie wyjściowej = 2
+	\item Ilość neuronów w warstwie wyjściowej = 2
 	\item ETA (learning rate) = 0,1
 	\item Batch size = 1
 	\item Target error = 0,18
 \end{itemize}
-Konfiguracja ta wynika z tego, iż zestaw danych uczących jest jak zostało wspomniane wcześniej liniowo separowalny dlatego też 
+Konfiguracja ta wynika z tego, iż zestaw danych uczących jest jak zostało wspomniane wcześniej liniowo separowalny.
+
+Podsumowując, zbiór danych oraz dobrane do niego parametry mają bardzo duży wpływ na dokładność oraz szybkość uczenia się sieci neuronowych. Niemożliwe jest określenie uniwersalnych parametrów, które działałyby jednakowo dobrze dla wszystkich możliwych zestawów danych oraz każdego typu sieci neuronowej.
+
+Jednakowoż można stwierdzić, że do każdego zestawu danych można dobrać najoptymalniejszy rodzaj sieci i parametrów uczących pozwalających na najdokładniejsze i najszybsze rozwiązanie problemu. 
 \clearpage
 
 \addcontentsline{toc}{section}{Literatura}

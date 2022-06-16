@@ -50,16 +50,14 @@ class Network(object):
             evalAcc = (evalVal/n_test*100)
             if cur_err < error_target or j == epochs-1:
                 if test_data:
-                    #print("{0}, {2:.2f}, {3:.0f}%".format(
-                    #    j, cur_err, evalAcc))
-                    #print("Epoch {0}: {1} / {2} - {3:.0f}%".format(
-                    #    j, evalVal, n_test, evalAcc '''time2-time1'''))
+                    print("{0}, {1}, {2:.2f}, {3:.0f}%".format(j, mini_batch_size, cur_err, evalAcc))
+                    return(j, mini_batch_size, cur_err, evalAcc)
                     pass
                 else:
                     print("Epoch {0} complete in {1:.2f} seconds".format(j, time2-time1))
                 break
 
-            print("{0}, {1:.6f}, {2:.0f}%".format(j, cur_err, evalAcc))
+            #print("{0}, {1:.6f}, {2:.0f}%".format(j, cur_err, evalAcc))
             
 
     def update_mini_batch(self, mini_batch, eta):
